@@ -12,7 +12,8 @@ variables:
   # Container registry service connection established during pipeline creation
   azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
   resourceGroup: 'rg-aks-active'
-  aksCluster: 'aks-active-cluster'
+  aksCluster1: 'aks-active-cluster'
+  aksCluster2: 'aks-passive-cluster'
   dockerRegistryServiceConnection: 'acrconnect'
   imageRepository: 'examplevotingappvote'
   containerRegistry: 'aksmultiregistryta5u4.azurecr.io'
@@ -47,7 +48,7 @@ stages:
   dependsOn: BuildAndPushImage # This stage runs only after the build and push is successful
   condition: succeeded() # Only run if the previous stage succeeded
   jobs:
-  - job: Deploy
+  - job: Deploy1
     displayName: 'Deploy Vote Service'
     steps:
     - task: Kubernetes@1
@@ -56,7 +57,18 @@ stages:
         connectionType: 'Azure Resource Manager'
         azureSubscriptionEndpoint: 'capstone2'
         azureResourceGroup: '$(resourceGroup)'
-        kubernetesCluster: '$(aksCluster)'
+        kubernetesCluster: '$(aksCluster1)'
         command: 'apply'
         arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
-      
+  - job: Deploy2
+    displayName: 'Deploy Vote Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: '$(resourceGroup)'
+        kubernetesCluster: '$(aksCluster2)'
+        command: 'apply'
+        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
