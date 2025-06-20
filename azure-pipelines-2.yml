@@ -10,6 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
+  BUILDPLATFORM: linux/amd64
   dockerRegistryServiceConnection: '567d90b6-117d-4f90-be1c-7dd06b595f42'
   imageRepository: 'examplevotingappvote'
   containerRegistry: 'yogeshacr1.azurecr.io'
