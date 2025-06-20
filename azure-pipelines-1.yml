@@ -13,9 +13,9 @@ variables:
   azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
   resourceGroup: 'rg-aks-active'
   aksCluster: 'aks-active-cluster'
-  dockerRegistryServiceConnection: '567d90b6-117d-4f90-be1c-7dd06b595f42'
+  dockerRegistryServiceConnection: 'acrconnect'
   imageRepository: 'examplevotingappvote'
-  containerRegistry: 'yogeshacr1.azurecr.io'
+  containerRegistry: 'aksmultiregistryta5u4.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/vote/Dockerfile'
   tag: '$(Build.BuildId)'
 
