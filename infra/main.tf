@@ -122,5 +122,28 @@ resource "azurerm_traffic_manager_external_endpoint" "aks_endpoint" {
   weight              = 100 # Can be adjusted for weighted routing
   target              = azurerm_public_ip.aks_frontend_ip[each.key].ip_address
   always_serve_enabled = true # Keep serving traffic if all endpoints are unhealthy (optional)
-  endpoint_location   = each.value.location # Added location for Performance routing (line 141)
+  endpoint_location   = each.value.location
+}
+
+// Add Azure Container Registry (ACR)
+// This will be created in the main resource group's location (Central US).
+resource "azurerm_container_registry" "main_acr" {
+  name                = "aksmultiregistry${random_string.suffix.result}" # Globally unique name
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  sku                 = "Basic" # Basic, Standard, or Premium
+  admin_enabled       = true    # Enables admin user for easier push/pull (for testing/dev)
+
+  tags = {
+    environment = "dev"
+    project     = "MultiRegionAKS"
+  }
+}
+
+// Helper resource to generate a random string for ACR name uniqueness
+resource "random_string" "suffix" {
+  length  = 5
+  special = false
+  upper   = false
+  numeric = true
 }
