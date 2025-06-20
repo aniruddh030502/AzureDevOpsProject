@@ -10,6 +10,9 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
+  azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
+  resourceGroup: 'rg-aks-active'
+  aksCluster: 'aks-active-cluster'
   dockerRegistryServiceConnection: '735ce0c0-1228-41a8-918d-2d6b03b8e800'
   imageRepository: 'examplevotingappresult'
   containerRegistry: 'yogeshacr1.azurecr.io'
