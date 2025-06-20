@@ -54,9 +54,9 @@ stages:
       displayName: 'Apply Kubernetes Manifests'
       inputs:
         connectionType: 'Azure Resource Manager'
-        azureSubscription: '$(azureSubscription)'
+        azureSubscriptionEndpoint: 'capstone2'
         azureResourceGroup: '$(resourceGroup)'
         kubernetesCluster: '$(aksCluster)'
         command: 'apply'
         arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
-        force: true # Forces Kubernetes to update resources even if they are unchanged
+      
