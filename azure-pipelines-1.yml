@@ -42,6 +42,8 @@ stages:
           $(tag)
 - stage: DeployToAKS
   displayName: 'Deploy to AKS'
+  pool:
+    name: "Default"
   dependsOn: BuildAndPushImage # This stage runs only after the build and push is successful
   condition: succeeded() # Only run if the previous stage succeeded
   jobs:
