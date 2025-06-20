@@ -10,8 +10,8 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '3951bfe8-bb6c-4fa2-b5b5-8dfb02d52db1'
-  imageRepository: 'examplevotingappworker'
+  dockerRegistryServiceConnection: '567d90b6-117d-4f90-be1c-7dd06b595f42'
+  imageRepository: 'examplevotingappvote'
   containerRegistry: 'yogeshacr1.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/worker/Dockerfile'
   tag: '$(Build.BuildId)'
