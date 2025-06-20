@@ -10,7 +10,7 @@ variables:
 
   # ACR service connection & image details
   dockerRegistryServiceConnection: '567d90b6-117d-4f90-be1c-7dd06b595f42'
-  imageRepository: 'examplevotingappvote'
+  imageRepository: 'examplevotingappworker'
   containerRegistry: 'yogeshacr1.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/worker/Dockerfile'
   tag: '$(Build.BuildId)'
