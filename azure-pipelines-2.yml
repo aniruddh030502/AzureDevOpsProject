@@ -5,8 +5,8 @@ resources:
 - repo: self
 
 variables:
-  # Build platform for multi-arch (used in Dockerfile)
-  BUILDPLATFORM: linux/amd64
+  # Build platform (optional if not using BuildKit)
+  #BUILDPLATFORM: linux/amd64
 
   # ACR service connection & image details
   dockerRegistryServiceConnection: '567d90b6-117d-4f90-be1c-7dd06b595f42'
@@ -15,10 +15,7 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/worker/Dockerfile'
   tag: '$(Build.BuildId)'
 
-  # Enable Docker BuildKit
-  DOCKER_BUILDKIT: 1
-
-  # Hosted image with Docker installed
+  # Agent VM image
   vmImageName: 'ubuntu-latest'
 
 stages:
@@ -28,7 +25,7 @@ stages:
   - job: Build
     displayName: Build and Push Docker Image
     pool:
-      name: "Default"
+      name: "Default"  # Use Microsoft-hosted agent with Docker
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -37,8 +34,6 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(Build.SourcesDirectory)
         tags: |
           $(tag)
-        buildContext: $(Build.SourcesDirectory)
-        arguments: |
-          --build-arg BUILDPLATFORM=$(BUILDPLATFORM)
