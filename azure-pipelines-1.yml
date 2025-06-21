@@ -10,7 +10,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
+  azureSubscription: 'capstone2'
   resourceGroup: 'rg-aks-active'
   aksCluster1: 'aks-active-cluster'
   aksCluster2: 'aks-passive-cluster'
@@ -19,8 +19,6 @@ variables:
   containerRegistry: 'aksmultiregistryani.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/vote/Dockerfile'
   tag: '$(Build.BuildId)'
-
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
 stages:
@@ -41,34 +39,42 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
 - stage: DeployToAKS
   displayName: 'Deploy to AKS'
   pool:
     name: "Default"
-  dependsOn: BuildAndPushImage # This stage runs only after the build and push is successful
-  condition: succeeded() # Only run if the previous stage succeeded
+  dependsOn: BuildAndPushImage
+  condition: succeeded()
   jobs:
   - job: Deploy1
-    displayName: 'Deploy Vote Service'
+    displayName: 'Deploy to AKS Cluster 1'
     steps:
+    - script: |
+        sed -i 's|REPLACE_ME_IMAGE|$(containerRegistry)/$(imageRepository):$(tag)|' k8s-specifications/vote-deployment.yaml
+      displayName: 'Inject image into vote-deployment.yaml'
     - task: Kubernetes@1
-      displayName: 'Apply Kubernetes Manifests'
+      displayName: 'Apply Kubernetes Manifests to Cluster 1'
       inputs:
         connectionType: 'Azure Resource Manager'
-        azureSubscriptionEndpoint: 'capstone2'
+        azureSubscriptionEndpoint: '$(azureSubscription)'
         azureResourceGroup: '$(resourceGroup)'
         kubernetesCluster: '$(aksCluster1)'
         command: 'apply'
-        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
+        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml'
+
   - job: Deploy2
-    displayName: 'Deploy Vote Service'
+    displayName: 'Deploy to AKS Cluster 2'
     steps:
+    - script: |
+        sed -i 's|REPLACE_ME_IMAGE|$(containerRegistry)/$(imageRepository):$(tag)|' k8s-specifications/vote-deployment.yaml
+      displayName: 'Inject image into vote-deployment.yaml'
     - task: Kubernetes@1
-      displayName: 'Apply Kubernetes Manifests'
+      displayName: 'Apply Kubernetes Manifests to Cluster 2'
       inputs:
         connectionType: 'Azure Resource Manager'
-        azureSubscriptionEndpoint: 'capstone2'
+        azureSubscriptionEndpoint: '$(azureSubscription)'
         azureResourceGroup: '$(resourceGroup)'
         kubernetesCluster: '$(aksCluster2)'
         command: 'apply'
-        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
+        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml'
