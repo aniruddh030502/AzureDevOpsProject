@@ -16,7 +16,7 @@ variables:
   aksCluster2: 'aks-passive-cluster'
   dockerRegistryServiceConnection: 'acrconnect'
   imageRepository: 'examplevotingappresult'
-  containerRegistry: 'aksmultiregistryta5u4.azurecr.io'
+  containerRegistry: 'aksmultiregistryvd3t8.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
   tag: '$(Build.BuildId)'
 
