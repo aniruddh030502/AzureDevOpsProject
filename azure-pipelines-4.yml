@@ -20,7 +20,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build
+- stage: BuildAndPushImage
   displayName: Build and push stage
   jobs:
   - job: Build
@@ -37,3 +37,34 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+- stage: DeployToAKS
+  displayName: 'Deploy to AKS'
+  pool:
+    name: "Default"
+  dependsOn: BuildAndPushImage # This stage runs only after the build and push is successful
+  condition: succeeded() # Only run if the previous stage succeeded
+  jobs:
+  - job: Deploy1
+    displayName: 'Deploy Vote Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: '$(resourceGroup)'
+        kubernetesCluster: '$(aksCluster1)'
+        command: 'apply'
+        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
+  - job: Deploy2
+    displayName: 'Deploy Vote Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: '$(resourceGroup)'
+        kubernetesCluster: '$(aksCluster2)'
+        command: 'apply'
+        arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml' # Adjust paths as needed
