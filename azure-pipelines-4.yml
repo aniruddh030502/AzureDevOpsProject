@@ -42,24 +42,17 @@ stages:
   dependsOn: BuildAndPushImage
   condition: succeeded()
   jobs:
-  - job: InstallDependencies
-    displayName: 'Install Flask App Requirements'
+  - job: AnalyzeFlask
+    displayName: 'Analyze Flask App'
     pool:
-      name: 'Default'  # or vmImage if using MS-hosted agent
+      name: 'Default'
     steps:
     - checkout: self
-
-    - script: |
-        python3 -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        pip install -r vote/requirements.txt
-      displayName: 'Set up venv and install dependencies'
 
     - task: SonarCloudPrepare@3
       displayName: 'Prepare SonarCloud Analysis'
       inputs:
-        SonarCloud: 'sonar03' # Your service connection
+        SonarCloud: 'sonar03'
         organization: 'devuser100453'
         scannerMode: 'CLI'
         configMode: 'manual'
@@ -70,11 +63,14 @@ stages:
           sonar.python.coverage.reportPaths=vote/coverage.xml
 
     - script: |
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r vote/requirements.txt
         cd vote
-        coverage run app.py &
-        sleep 5
-        coverage xml
-      displayName: 'Run Flask App and Generate Coverage'
+        coverage run -m unittest discover
+        coverage xml -o coverage.xml
+      displayName: 'Run Unit Tests and Generate Coverage Report'
 
     - task: SonarCloudAnalyze@3
       displayName: 'Run SonarCloud Analysis'
