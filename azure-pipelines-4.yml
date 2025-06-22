@@ -9,7 +9,7 @@ variables:
   resourceGroup: 'rg-aks-active'
   aksCluster1: 'aks-active-cluster'
   aksCluster2: 'aks-passive-cluster'
-  dockerRegistryServiceConnection: 'ff3c06eb-61dc-4b19-917c-9ff318d40ed9'
+  dockerRegistryServiceConnection: '256b71fb-aaf6-436a-8dab-e4a97fad1c67'
   imageRepository: 'examplevotingapp'
   containerRegistry: 'aksmultiregistryani.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
