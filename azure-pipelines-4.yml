@@ -49,11 +49,6 @@ stages:
     steps:
     - checkout: self
 
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '3.x'
-      displayName: 'Set up Python'
-
     - script: |
         cd vote
         python -m pip install --upgrade pip
