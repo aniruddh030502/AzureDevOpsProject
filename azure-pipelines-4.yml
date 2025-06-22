@@ -42,19 +42,19 @@ stages:
   dependsOn: BuildAndPushImage
   condition: succeeded()
   jobs:
-  - job: AnalyzeFlaskCode
-    displayName: 'Analyze Flask App with SonarCloud'
+  - job: InstallDependencies
+    displayName: 'Install Flask App Requirements'
     pool:
-      name: "Default"
+      name: 'Default'  # or vmImage if using MS-hosted agent
     steps:
     - checkout: self
 
     - script: |
-        cd vote
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install coverage
-      displayName: 'Install Flask App Dependencies'
+        python3 -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r vote/requirements.txt
+      displayName: 'Set up venv and install dependencies'
 
     - task: SonarCloudPrepare@3
       displayName: 'Prepare SonarCloud Analysis'
