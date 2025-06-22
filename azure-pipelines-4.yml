@@ -55,33 +55,36 @@ stages:
       displayName: 'Set up Python'
 
     - script: |
+        cd vote
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install coverage
-      displayName: 'Install Dependencies'
+      displayName: 'Install Flask App Dependencies'
 
-    - task: SonarCloudPrepare@1
+    - task: SonarCloudPrepare@3
       displayName: 'Prepare SonarCloud Analysis'
       inputs:
-        SonarCloud: 'sonar03' # Your SonarCloud service connection name
+        SonarCloud: 'sonar03' # Your service connection
         organization: 'devuser100453'
         scannerMode: 'CLI'
         configMode: 'manual'
         cliProjectKey: 'devuser100453_example-voting-app'
         cliProjectName: 'example-voting-app'
-        cliSources: '.'
+        cliSources: 'vote'
         extraProperties: |
-          sonar.python.coverage.reportPaths=coverage.xml
+          sonar.python.coverage.reportPaths=vote/coverage.xml
 
     - script: |
-        coverage run -m unittest discover
+        cd vote
+        coverage run app.py &
+        sleep 5
         coverage xml
-      displayName: 'Run Tests and Generate Coverage'
+      displayName: 'Run Flask App and Generate Coverage'
 
-    - task: SonarCloudAnalyze@1
+    - task: SonarCloudAnalyze@3
       displayName: 'Run SonarCloud Analysis'
 
-    - task: SonarCloudPublish@1
+    - task: SonarCloudPublish@3
       displayName: 'Publish SonarCloud Results'
       inputs:
         pollingTimeoutSec: '300'
