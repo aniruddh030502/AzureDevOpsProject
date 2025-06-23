@@ -18,7 +18,7 @@ variables:
   imageRepository: 'examplevotingappresult'
   containerRegistry: 'aksmultiregistryani.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
-  tag: '$(Build.BuildId)'
+  tag: 'latest'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
