@@ -15,5 +15,5 @@ spec:
         app: worker
     spec:
       containers:
-      - image: aksmultiregistryani.azurecr.io/examplevotingappworker:313
+      - image: aksmultiregistryani.azurecr.io/examplevotingappworker:latest
         name: worker
