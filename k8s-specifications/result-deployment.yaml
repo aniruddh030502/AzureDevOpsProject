@@ -15,7 +15,7 @@ spec:
         app: result
     spec:
       containers:
-      - image: aksmultiregistryani.azurecr.io/examplevotingappresult:314
+      - image: aksmultiregistryani.azurecr.io/examplevotingappresult:latest
         name: result
         ports:
         - containerPort: 80
