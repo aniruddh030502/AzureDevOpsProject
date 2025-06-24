@@ -5,12 +5,10 @@ metadata:
     app: vote
   name: vote
 spec:
-  type: NodePort
+  type: LoadBalancer # Changed from NodePort to LoadBalancer
   ports:
   - name: "vote-service"
-    port: 8080
-    targetPort: 5000
-    nodePort: 31000
+    port: 8080       # The port on the LoadBalancer that external traffic will hit
+    targetPort: 80   # The port on the pod where the application is listening
   selector:
     app: vote
-  
