@@ -18,5 +18,5 @@ spec:
       - image: aksmultiregistryani.azurecr.io/examplevotingapp:latest
         name: vote
         ports:
-        - containerPort: 80
+        - containerPort: 5050
           name: vote
