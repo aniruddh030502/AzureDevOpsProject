@@ -11,7 +11,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
-  resourceGroup: 'rg-aks-active'
+  resourceGroup: 'rg-aks-aniruddha'
   aksCluster1: 'aks-active-cluster'
   aksCluster2: 'aks-passive-cluster'
   dockerRegistryServiceConnection: '567d90b6-117d-4f90-be1c-7dd06b595f42'
