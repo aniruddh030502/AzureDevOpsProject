@@ -10,12 +10,12 @@ variables:
 
   # ACR service connection & image details
   azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
-  resourceGroup: 'rg-aks-active'
+  resourceGroup: 'rg-aks-aniruddha'
   aksCluster1: 'aks-active-cluster'
   aksCluster2: 'aks-passive-cluster'
-  dockerRegistryServiceConnection: '256b71fb-aaf6-436a-8dab-e4a97fad1c67'
+  dockerRegistryServiceConnection: 'bcdacaa8-1132-4ecf-9311-a8af866d6728'
   imageRepository: 'examplevotingappworker'
-  containerRegistry: 'aksmultiregistryani.azurecr.io'
+  containerRegistry: 'aniruddhaacr03.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/worker/Dockerfile'
   tag: 'latest'
 
