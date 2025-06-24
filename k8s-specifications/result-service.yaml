@@ -8,7 +8,7 @@ spec:
   type: LoadBalancer # Changed from NodePort to LoadBalancer
   ports:
   - name: "result-service"
-    port: 8081       # The port on the LoadBalancer that external traffic will hit
+    port: 80      # The port on the LoadBalancer that external traffic will hit
     targetPort: 80   # The port on the pod where the application is listening
   selector:
     app: result
