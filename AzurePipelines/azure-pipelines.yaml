@@ -1,0 +1,74 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- dependabot/npm_and_yarn/result/express-4.19.2
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
+  resourceGroup: 'rg-aks-aniruddha'
+  aksCluster1: 'aks-active-cluster'
+  aksCluster2: 'aks-passive-cluster'
+  dockerRegistryServiceConnection: 'bcdacaa8-1132-4ecf-9311-a8af866d6728'
+  imageRepository: 'examplevotingappresult'
+  containerRegistry: 'aniruddhaacr03.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/result/Dockerfile'
+  tag: 'latest'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: BuildAndPushImage
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      name: 'Default'
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+- stage: DeployToAKS
+  displayName: 'Deploy to AKS'
+  pool:
+    name: "Default"
+  dependsOn: BuildAndPushImage # This stage runs only after the build and push is successful
+  condition: succeeded() # Only run if the previous stage succeeded
+  jobs:
+  - job: Deploy1
+    displayName: 'Deploy Vote Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: 'parakram-capstone-backup'
+        kubernetesCluster: 'kpkm-cluster-backup'
+        command: 'apply'
+        arguments: '-f k8s-specifications/result-deployment.yaml -f k8s-specifications/result-service.yaml' # Adjust paths as needed
+  - job: Deploy2
+    displayName: 'Deploy Vote Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: '$(resourceGroup)'
+        kubernetesCluster: '$(aksCluster2)'
+        command: 'apply'
+        arguments: '-f k8s-specifications/result-deployment.yaml -f k8s-specifications/result-service.yaml' # Adjust paths as needed    
