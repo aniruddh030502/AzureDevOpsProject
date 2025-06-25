@@ -50,7 +50,7 @@ stages:
         connectionType: 'Azure Resource Manager'
         azureSubscriptionEndpoint: 'capstone2'
         azureResourceGroup: '$(resourceGroup)'
-        kubernetesCluster: '$(aksCluster1)'
+        kubernetesCluster: '$(aksCluster2)'
         command: 'apply'
         arguments: '-f k8s-specifications/db-deployment.yaml -f k8s-specifications/db-service.yaml'
   - job: Deploy2
