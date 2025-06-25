@@ -125,8 +125,8 @@ stages:
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscriptionEndpoint: '$(azureSubscription)'
-        azureResourceGroup: '$(resourceGroup)'
-        kubernetesCluster: '$(aksCluster1)'
+        azureResourceGroup: 'parakram-capstone-backup'
+        kubernetesCluster: 'kpkm-cluster-backup'
         command: 'apply'
         arguments: '-f k8s-specifications/vote-deployment.yaml -f k8s-specifications/vote-service.yaml'
 
