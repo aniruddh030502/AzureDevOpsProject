@@ -38,8 +38,8 @@ stages:
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscriptionEndpoint: 'capstone2'
-        azureResourceGroup: '$(resourceGroup)'
-        kubernetesCluster: '$(aksCluster1)'
+        azureResourceGroup: 'parakram-capstone-backup'
+        kubernetesCluster: 'kpkm-cluster-backup'
         command: 'apply'
         arguments: '-f k8s-specifications/redis-deployment.yaml -f k8s-specifications/redis-service.yaml' # Adjust paths as needed
       
@@ -49,8 +49,8 @@ stages:
       inputs:
         connectionType: 'Azure Resource Manager'
         azureSubscriptionEndpoint: 'capstone2'
-        azureResourceGroup: 'parakram-capstone-backup'
-        kubernetesCluster: 'kpkm-cluster-backup'
+        azureResourceGroup: '$(resourceGroup)'
+        kubernetesCluster: '$(aksCluster1)'
         command: 'apply'
         arguments: '-f k8s-specifications/db-deployment.yaml -f k8s-specifications/db-service.yaml'
   - job: Deploy2
