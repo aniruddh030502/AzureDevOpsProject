@@ -69,26 +69,6 @@ At the heart of this setup is a **multi-region AKS deployment**, enabling global
 
 ---
 
-## 📁 Project Structure
-
-```bash
-.
-├── InfrastructureTerraform/      # Terraform configuration for Azure resources
-│   ├── main.tf
-│   ├── variables.tf
-│   └── outputs.tf
-├── k8s-specifications/           # Kubernetes manifests
-│   ├── microservices/            #   - vote, result, worker, backend apps
-│   └── services/                 #   - Kubernetes Services
-├── vote/                         # Vote microservice code
-├── result/                       # Result microservice code
-├── worker/                       # Worker microservice code
-├── seed-data/                    # Backend microservice code
-└── AzurePipelines/               # Azure DevOps pipeline definitions
-
-
-
-
 
 
 ## ⚙️ Implement CI/CD Pipelines with Azure DevOps
