@@ -86,6 +86,11 @@ At the heart of this setup is a **multi-region AKS deployment**, enabling global
 ├── seed-data/                    # Backend microservice code
 └── AzurePipelines/               # Azure DevOps pipeline definitions
 
+
+
+
+
+
 ## ⚙️ Implement CI/CD Pipelines with Azure DevOps
 
 This repository includes sample `azure-pipelines.yml` definitions for setting up **Continuous Integration (CI)** and **Continuous Delivery (CD)** using **Azure DevOps**.
