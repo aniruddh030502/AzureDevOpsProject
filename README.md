@@ -1,109 +1,141 @@
-Multi-Region Azure Kubernetes Service (AKS) with Hybrid Cloud
-This repository contains the Infrastructure as Code (IaC) for deploying a robust, highly available, secure, and observable cloud infrastructure on Microsoft Azure. The primary objective of this project is to establish a resilient platform for hosting containerized applications (microservices) across multiple geographical regions, seamlessly integrating with on-premises environments, and providing centralized operational insights. Terraform is utilized for defining and managing all infrastructure components.
+# 🌍 Multi-Region Azure Kubernetes Service (AKS) with Hybrid Cloud
 
-Architecture Overview
-The core of this architecture is a multi-region Azure Kubernetes Service (AKS) deployment, designed for global availability and disaster recovery.
+This repository contains the **Infrastructure as Code (IaC)** for deploying a **robust, highly available, secure**, and **observable** cloud infrastructure on **Microsoft Azure**.
 
-Global Traffic Management: Azure Traffic Manager acts as the intelligent global entry point, routing user traffic to the most performant and available AKS cluster.
+The objective is to build a resilient platform for hosting containerized applications (microservices) **across multiple geographical regions**, with **on-premises integration** and **centralized observability** using **Terraform**.
 
-Regional AKS Deployments: Two distinct AKS clusters are deployed in separate Azure regions (e.g., Central US and West US 3), each within its own Virtual Network (VNet) with dedicated public and private subnets. This provides geographic redundancy for your applications.
+---
 
-Cross-Region Connectivity: VNet peering enables secure, low-latency private communication directly between the two regional Azure networks.
+## 🏗️ Architecture Overview
 
-Hybrid Cloud Integration: A simulated on-premises network is connected to the Azure environment via a secure Site-to-Site VPN, demonstrating secure hybrid cloud connectivity for data exchange between cloud-hosted applications and on-premises resources.
+At the heart of this setup is a **multi-region AKS deployment**, enabling global application availability and disaster recovery.
 
-Centralized Services: Key shared services include an existing Azure Container Registry (ACR) for image management, Azure Key Vault for secure secrets storage, and Azure Monitor (with Log Analytics Workspace) for comprehensive logging, metrics, and diagnostics across the entire infrastructure.
+- **🌐 Global Traffic Management**  
+  Azure **Traffic Manager** routes users to the most performant AKS cluster using DNS-based, performance-aware routing.
 
-Key Features & Benefits
-This architecture delivers significant advantages for cloud-native application deployment:
+- **📍 Regional AKS Deployments**  
+  Two AKS clusters are deployed in **Central US** and **West US 3**, each in separate **VNets** with **public and private subnets**.
 
-High Availability & Disaster Recovery: Leveraging multi-region AKS and Azure Traffic Manager ensures that your applications remain accessible and performant even during regional outages, providing robust business continuity.
+- **🔁 Cross-Region Connectivity**  
+  **VNet peering** enables secure, low-latency communication between regions.
 
-Enhanced Security: Network segmentation (public/private subnets), Network Security Groups (NSGs), Azure Key Vault for secrets management, and Managed Identities for secure Azure resource access collectively form a strong security posture. The Site-to-Site VPN encrypts hybrid traffic.
+- **🏢 Hybrid Cloud Integration**  
+  A simulated on-premises network is connected via **Site-to-Site VPN**, ensuring secure hybrid access.
 
-Optimal Performance: Traffic Manager's performance-based routing directs users to the geographically closest and healthiest application instance, minimizing latency.
+- **🔐 Centralized Services**  
+  - **Azure Container Registry (ACR)** – for container image storage.  
+  - **Azure Key Vault** – for secrets management.  
+  - **Azure Monitor & Log Analytics** – for logs, metrics, and diagnostics.
 
-Hybrid Connectivity: Seamless and secure integration with on-premises environments allows applications to securely access on-premises data or services.
+---
 
-Operational Efficiency: Infrastructure as Code with Terraform ensures consistent, repeatable, and automated deployments, reducing manual effort and potential errors.
+## 🌟 Key Features & Benefits
 
-Comprehensive Observability: Centralized logging and monitoring with Azure Monitor provide deep insights into application and infrastructure health, facilitating proactive issue identification and rapid troubleshooting.
+- **✅ High Availability & Disaster Recovery**  
+  Multi-region AKS with Traffic Manager guarantees uptime and geo-redundancy.
 
-Technologies Used
-Azure Kubernetes Service (AKS): Container orchestration platform.
+- **🛡️ Enhanced Security**  
+  Includes public/private subnet isolation, NSGs, Key Vault, Managed Identities, and encrypted VPN traffic.
 
-Azure Virtual Network (VNet): Foundational networking service.
+- **⚡ Optimal Performance**  
+  Traffic Manager routes users to the nearest, healthiest region to reduce latency.
 
-Azure Container Registry (ACR): Private Docker image registry.
+- **🌐 Hybrid Connectivity**  
+  Secure access between Azure and on-premises systems.
 
-Azure Traffic Manager: Global DNS-based load balancing and traffic routing.
+- **🤖 Operational Efficiency**  
+  Fully automated IaC with **Terraform**.
 
-Azure Key Vault: Secure secrets and certificate management.
+- **📊 Comprehensive Observability**  
+  Logs and metrics are centralized in **Azure Monitor**, enhanced by **New Relic** APM.
 
-Azure VPN Gateway: Enables Site-to-Site VPN for hybrid connectivity.
+---
 
-Azure Monitor & Log Analytics Workspace: Centralized logging, metrics, and analytics.
+## 🧰 Technologies Used
 
-Terraform: Infrastructure as Code tool for provisioning and managing Azure resources.
+- **Azure Kubernetes Service (AKS)** – Container orchestration  
+- **Azure Virtual Network (VNet)** – Network backbone  
+- **Azure Container Registry (ACR)** – Private Docker registry  
+- **Azure Traffic Manager** – Global traffic routing  
+- **Azure Key Vault** – Secrets management  
+- **Azure VPN Gateway** – Site-to-Site hybrid VPN  
+- **Azure Monitor & Log Analytics** – Observability  
+- **Terraform** – Infrastructure as Code  
+- **Python** – Sample microservice language  
+- **Coverage.py** – Code coverage analysis  
+- **Azure DevOps Pipelines** – CI/CD workflows  
+- **SonarQube / SonarCloud** – Code quality and security scanning  
+- **New Relic** – APM, tracing, and monitoring
 
-Python: Example language for microservices (e.g., vote).
+---
 
-Coverage.py: Python code coverage tool for CI pipelines.
+## 📁 Project Structure
 
-Azure DevOps Pipelines: For Continuous Integration (CI) and Continuous Delivery (CD) workflows.
-
-SonarQube/SonarCloud: For automated static code analysis, quality gates, and code quality/security reporting within CI pipelines.
-
-New Relic: For comprehensive Application Performance Monitoring (APM), Kubernetes monitoring, distributed tracing, and overall observability.
-
-Project Structure (High-Level)
+```bash
 .
-├── InfrastructureTerraform/
-│   ├── main.tf             # Main Terraform configuration for Azure resources
-│   ├── variables.tf        # Input variables for Terraform
-│   └── outputs.tf          # Output variables from Terraform deployment
-├── k8s-specifications/
-│   ├── microservices/      # Kubernetes manifests for vote, result, worker, backend apps          
-│   └── services/           # Kubernetes Service definitions
-├── vote/               #Source code for vote microservice
-│── result/             # Source code for result microservice
-│── worker/             # Source code for worker microservice
-│── seed-data/            # Source code for backend microservice
-└── AzurePipelines    # Azure DevOps CI/CD pipeline definitions
+├── InfrastructureTerraform/      # Terraform configuration for Azure resources
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+├── k8s-specifications/           # Kubernetes manifests
+│   ├── microservices/            #   - vote, result, worker, backend apps
+│   └── services/                 #   - Kubernetes Services
+├── vote/                         # Vote microservice code
+├── result/                       # Result microservice code
+├── worker/                       # Worker microservice code
+├── seed-data/                    # Backend microservice code
+└── AzurePipelines/               # Azure DevOps pipeline definitions
 
+## ⚙️ Implement CI/CD Pipelines with Azure DevOps
 
-Implement CI/CD Pipelines with Azure DevOps
-Configure Azure DevOps Pipelines (azure-pipelines.yml examples are expected in this repo):
+This repository includes sample `azure-pipelines.yml` definitions for setting up **Continuous Integration (CI)** and **Continuous Delivery (CD)** using **Azure DevOps**.
 
-Individual CI Pipelines: Set up separate CI pipelines for each microservice (vote, result, worker, backend) to trigger on code pushes. These pipelines will:
+### 🧪 Individual CI Pipelines
 
-Build the application code.
+Each microservice (e.g., **vote**, **result**, **worker**, **backend**) should have a dedicated CI pipeline that is triggered on every code push.
 
-Run unit tests (e.g., using coverage.py for Python services).
+These pipelines will perform the following steps:
 
-Perform static code analysis with SonarQube/SonarCloud to enforce code quality and security gates.
+1. **Build the application code**
+2. **Run unit tests**
+   - Use `coverage.py` (for Python microservices) to measure test coverage
+3. **Static code analysis**
+   - Integrate with **SonarQube** or **SonarCloud**
+   - Enforce **code quality** and **security gates**
+4. **Build Docker images**
+   - Use the Dockerfile from each microservice directory
+5. **Push Docker images to Azure Container Registry (ACR)**
+6. **Publish artifacts**
+   - Store **test results**, **logs**, and **coverage reports**
 
-Build Docker images for the microservices.
+💡 Example CI structure in YAML:
 
-Push container images to the Azure Container Registry (ACR).
+```yaml
+trigger:
+  branches:
+    include:
+      - main
 
-Publish test results and code coverage reports as pipeline artifacts.
+pool:
+  vmImage: ubuntu-latest
 
-Multi-Stage CD Pipelines: Extend the YAML pipelines to include deployment stages.
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
 
-These stages will pull the latest container images from ACR.
+  - script: |
+      pip install -r requirements.txt
+      coverage run -m unittest discover
+      coverage report
+    displayName: 'Run Tests'
 
-Apply updated Kubernetes manifests to deploy or update your microservices on the respective AKS clusters (e.g., Development, Staging, Production environments).
+  - task: SonarCloudPrepare@1
+    # SonarCloud setup here...
 
-Implement manual approvals for critical deployments.
-
-Enhance Observability with New Relic
-Integrate New Relic for deep application and infrastructure monitoring:
-
-New Relic Agents: Deploy New Relic APM agents alongside your microservices (e.g., Python agent for vote) to collect application-level performance metrics, transaction traces, and error details.
-
-Kubernetes Integration: Configure New Relic's Kubernetes integration to monitor your AKS clusters, nodes, and pods, providing insights into resource utilization, events, and health.
-
-Unified Dashboards & Alerts: Leverage New Relic's platform to create custom dashboards, visualize distributed traces across your microservices, and set up proactive alerts based on application performance, errors, or infrastructure health metrics. This complements the Azure Monitor logs collected by the azurerm_log_analytics_workspace.
-
-By following these steps, you will establish a robust, end-to-end cloud-native platform on Azure, enabling efficient development, secure deployment, and comprehensive monitoring of your microservices.
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'YourACRServiceConnection'
+      repository: 'your-app'
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
