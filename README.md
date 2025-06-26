@@ -50,23 +50,7 @@ At the heart of this setup is a **multi-region AKS deployment**, enabling global
   Logs and metrics are centralized in **Azure Monitor**, enhanced by **New Relic** APM.
 
 ---
-## 📁 Project Structure
 
-```bash
-.
-├── InfrastructureTerraform/      # Terraform configuration for Azure resources
-│   ├── main.tf
-│   ├── variables.tf
-│   └── outputs.tf
-├── k8s-specifications/           # Kubernetes manifests
-│   ├── microservices/            #   - vote, result, worker, backend apps
-│   └── services/                 #   - Kubernetes Services
-├── vote/                         # Vote microservice code
-├── result/                       # Result microservice code
-├── worker/                       # Worker microservice code
-├── seed-data/                    # Backend microservice code
-└── AzurePipelines/               # Azure DevOps pipeline definitions
----
 ## 🧰 Technologies Used
 
 - **Azure Kubernetes Service (AKS)** – Container orchestration  
@@ -140,3 +124,20 @@ steps:
       repository: 'your-app'
       command: 'buildAndPush'
       Dockerfile: '**/Dockerfile'
+## 📁 Project Structure
+
+```bash
+.
+├── InfrastructureTerraform/      # Terraform configuration for Azure resources
+│   ├── main.tf
+│   ├── variables.tf
+│   └── outputs.tf
+├── k8s-specifications/           # Kubernetes manifests
+│   ├── microservices/            #   - vote, result, worker, backend apps
+│   └── services/                 #   - Kubernetes Services
+├── vote/                         # Vote microservice code
+├── result/                       # Result microservice code
+├── worker/                       # Worker microservice code
+├── seed-data/                    # Backend microservice code
+└── AzurePipelines/               # Azure DevOps pipeline definitions
+---
