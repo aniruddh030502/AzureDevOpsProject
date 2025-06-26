@@ -1,0 +1,74 @@
+trigger:
+- dependabot/npm_and_yarn/result/express-4.19.2
+
+resources:
+- repo: self
+
+variables:
+  # Build platform (optional if not using BuildKit)
+  #BUILDPLATFORM: linux/amd64
+
+  # ACR service connection & image details
+  azureSubscription: 'capstone2' # Create this in Project Settings -> Service connections
+  resourceGroup: 'rg-aks-aniruddha'
+  aksCluster1: 'aks-active-cluster'
+  aksCluster2: 'aks-passive-cluster'
+  dockerRegistryServiceConnection: 'bcdacaa8-1132-4ecf-9311-a8af866d6728'
+  imageRepository: 'examplevotingappworker'
+  containerRegistry: 'aniruddhaacr03.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/worker/Dockerfile'
+  tag: 'latest'
+
+  # Agent VM image
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: BuildAndPushImage
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build and Push Docker Image
+    pool:
+      name: "Default"  # Use Microsoft-hosted agent with Docker
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: $(Build.SourcesDirectory)/worker
+        tags: |
+          $(tag)
+- stage: DeployToAKS
+  displayName: 'Deploy to AKS'
+  pool:
+    name: "Default"
+  dependsOn: BuildAndPushImage # This stage runs only after the build and push is successful
+  condition: succeeded() # Only run if the previous stage succeeded
+  jobs:
+  - job: Deploy1
+    displayName: 'Deploy Worker Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: 'parakram-capstone-backup'
+        kubernetesCluster: 'kpkm-cluster-backup'
+        command: 'apply'
+        arguments: '-f k8s-specifications/worker-deployment.yaml'
+  - job: Deploy2
+    displayName: 'Deploy Worker Service'
+    steps:
+    - task: Kubernetes@1
+      displayName: 'Apply Kubernetes Manifests'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'capstone2'
+        azureResourceGroup: '$(resourceGroup)'
+        kubernetesCluster: '$(aksCluster2)'
+        command: 'apply'
+        arguments: '-f k8s-specifications/worker-deployment.yaml'
