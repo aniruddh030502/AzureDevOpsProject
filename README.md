@@ -66,7 +66,7 @@ At the heart of this setup is a **multi-region AKS deployment**, enabling global
 ├── worker/                       # Worker microservice code
 ├── seed-data/                    # Backend microservice code
 └── AzurePipelines/               # Azure DevOps pipeline definitions
- ---
+---
 ## 🧰 Technologies Used
 
 - **Azure Kubernetes Service (AKS)** – Container orchestration  
